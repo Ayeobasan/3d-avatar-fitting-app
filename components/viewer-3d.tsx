@@ -14,9 +14,17 @@ import {
 } from "@react-three/drei"
 import { Box, CircularProgress, Typography, Alert } from "@mui/material"
 import { ErrorBoundary } from "react-error-boundary"
-function Model({ url, position = [0, 0, 0], scale = 1, rotation = [0, 0, 0] }: any) {
+
+
+interface ModelProps {
+  url: string
+  position?: [number, number, number]
+  scale?: number
+  rotation?: [number, number, number]
+}
+function Model({ url, position = [0, 0, 0], scale = 1, rotation = [0, 0, 0] }: ModelProps) {
   const [error, setError] = useState(null)
-  const { scene } = useGLTF(url as string) 
+  const { scene } = useGLTF(url)
 
   if (!url) return null
 
@@ -31,6 +39,8 @@ function Model({ url, position = [0, 0, 0], scale = 1, rotation = [0, 0, 0] }: a
         </Box>
       </Html>
     )
+  } else {
+    setError(null)
   }
 
   return <primitive object={scene} position={position} scale={scale} rotation={rotation} />
@@ -68,7 +78,7 @@ function LoadingScreen() {
   )
 }
 
-function FallbackComponent({ error }: any) {
+function FallbackComponent({ error }: { error: Error }) {
   return (
     <Box
       sx={{ p: 4, bgcolor: "#f5f5f5", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}
@@ -117,7 +127,8 @@ export default function Viewer3D({
         <Alert severity="error">
           <Typography variant="h6">WebGL Not Supported</Typography>
           <Typography variant="body2">
-            Your browser or device doesn't support WebGL, which is required for 3D rendering. Please try a different
+            Your browser or device doesn&apos;t support WebGL
+            , which is required for 3D rendering. Please try a different
             browser or device.
           </Typography>
         </Alert>
@@ -147,7 +158,7 @@ export default function Viewer3D({
               powerPreference: "default",
               failIfMajorPerformanceCaveat: false,
             }}
-            dpr={[1, 1.5]} 
+            dpr={[1, 1.5]}
           >
             <PerspectiveCamera makeDefault position={[0, 1, 3]} />
             <ambientLight intensity={0.5} />

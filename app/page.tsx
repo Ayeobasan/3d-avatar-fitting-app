@@ -53,7 +53,8 @@ export default function Home() {
   const handleResetScene = useCallback(() => {
     if (avatarUrl) URL.revokeObjectURL(avatarUrl)
     if (clothingUrl) URL.revokeObjectURL(clothingUrl)
-
+    setClothingPosition([0, 0, 0])
+    setClothingScale(1)
     setAvatarUrl(null)
     setClothingUrl(null)
     setShowClothing(true)
